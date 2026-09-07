@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zentrix Agent Platform",
-  description: "Autonomous agent orchestration and management platform",
+  title: "Zentrix Control Centre",
+  description: "Start → Approve → Add for autonomous Shopify stores",
 };
 
 export default function RootLayout({

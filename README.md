@@ -1,16 +1,29 @@
 # Zentrix Control Centre
 
-**Zentrix Control Centre** is the SA dropshipping / autonomous Shopify umbrella: **Start -> Approve -> Add**.
+**Zentrix Control Centre** is the SA dropshipping / autonomous Shopify umbrella: **Start → Approve → Add**.
 
 This repository is the control plane for running that loop — sourcing, review, and store operations — with the existing **agent platform MVP** as the foundation (autonomous agent orchestration, task queues, and dashboard).
 
 ## What it does
 
-- **Start**: kick off sourcing / agent workflows for products and ops
-- **Approve**: human-in-the-loop review before anything hits the store
-- **Add**: push approved items into Shopify (and related automations)
+- **Start**: create a store draft on a theme template (`shrine` or `olivia`)
+- **Approve**: human-in-the-loop review (`draft` / `pending_approval` → `approved` or `rejected`)
+- **Add**: provision the store (`approved` → `provisioning` → `live`) and record the selected theme package path
 
-Under the hood, the MVP still provides agent management, team workflows, real-time monitoring, LLM integration, and a management UI.
+The agent/task MVP remains available on the same dashboard for sourcing and ops workflows.
+
+Shopify Admin API is **not** wired yet (no secrets, no live shop create). Provisioning is an in-memory stub.
+
+## Theme packages
+
+Catalog: [`themes/catalog.json`](themes/catalog.json)
+
+| Template ID | Theme | Package |
+|-------------|--------|---------|
+| `shrine` | Shrine 1.3.1 | `themes/packages/shrine-1.3.1.zip` |
+| `olivia` | Olivia 14.2.5 / LuminTheme | `themes/packages/olivia-14.2.5.zip` |
+
+Packages are in-repo (`themes/packages/*.zip`). `GET /api/themes` marks each template `available` when the zip is on disk. See [`themes/README.md`](themes/README.md).
 
 ## Tech Stack
 
@@ -26,9 +39,16 @@ Clone the repo at https://github.com/billyboy95/zentrix.git
 
 After cloning, set up backend under backend/ (install deps, copy env example, run the API) and frontend under frontend/ (install deps, run the app). Dashboard: http://localhost:3000
 
+Local API (in-memory, no Shopify keys):
+
+- `GET /api/themes` — catalog
+- `GET|POST /api/stores` — list / Start (draft)
+- `POST /api/stores/:id/approve` — Approve
+- `POST /api/stores/:id/provision` — Add
+
 ## Project Structure
 
-Root layout: backend/ Node API, frontend/ Next.js Control Centre UI, docker-compose.yml for Postgres and Redis, AGENTS.md notes, README.md.
+Root layout: backend/ Node API, frontend/ Next.js Control Centre UI, themes/ catalog + packages, docker-compose.yml for Postgres and Redis, AGENTS.md notes, README.md.
 
 ## License
 

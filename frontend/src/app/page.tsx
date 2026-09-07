@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import StoreFlow from "../components/StoreFlow";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
@@ -114,10 +115,15 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       <header className="border-b border-zinc-800 px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <h1 className="text-xl font-bold tracking-tight">
-            <span className="text-indigo-400">Zentrix</span> Agent Platform
-          </h1>
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">
+              <span className="text-indigo-400">Zentrix</span> Control Centre
+            </h1>
+            <p className="mt-0.5 text-xs text-zinc-500">
+              Shopify stores · Start → Approve → Add
+            </p>
+          </div>
           <span
             className={`rounded-full px-3 py-1 text-xs font-medium ${
               apiStatus === "online"
@@ -132,117 +138,126 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-8 space-y-8">
-        {/* Agents Section */}
-        <section>
-          <h2 className="mb-4 text-lg font-semibold text-zinc-200">Agents</h2>
-          <div className="mb-4 flex gap-3">
-            <input
-              value={newAgentName}
-              onChange={(e) => setNewAgentName(e.target.value)}
-              placeholder="Agent name"
-              className="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
-            />
-            <input
-              value={newAgentDesc}
-              onChange={(e) => setNewAgentDesc(e.target.value)}
-              placeholder="Description (optional)"
-              className="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
-            />
-            <button
-              onClick={createAgent}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 transition-colors"
-            >
-              Create Agent
-            </button>
+      <main className="mx-auto max-w-6xl px-6 py-8 space-y-12">
+        <StoreFlow />
+
+        <div className="border-t border-zinc-800 pt-8 space-y-8">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
+              Agent platform MVP
+            </p>
+            <h2 className="mt-1 text-lg font-semibold text-zinc-200">Agents &amp; tasks</h2>
           </div>
-          {agents.length === 0 ? (
-            <p className="text-sm text-zinc-500">No agents yet. Create one above.</p>
-          ) : (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {agents.map((agent) => (
-                <div
-                  key={agent.id}
-                  className="rounded-lg border border-zinc-800 bg-zinc-900 p-4"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="font-medium text-zinc-100">{agent.name}</h3>
-                      <p className="mt-1 text-xs text-zinc-500">{agent.description}</p>
+
+          <section>
+            <h3 className="mb-4 text-base font-semibold text-zinc-200">Agents</h3>
+            <div className="mb-4 flex gap-3">
+              <input
+                value={newAgentName}
+                onChange={(e) => setNewAgentName(e.target.value)}
+                placeholder="Agent name"
+                className="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
+              />
+              <input
+                value={newAgentDesc}
+                onChange={(e) => setNewAgentDesc(e.target.value)}
+                placeholder="Description (optional)"
+                className="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
+              />
+              <button
+                onClick={createAgent}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 transition-colors"
+              >
+                Create Agent
+              </button>
+            </div>
+            {agents.length === 0 ? (
+              <p className="text-sm text-zinc-500">No agents yet. Create one above.</p>
+            ) : (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {agents.map((agent) => (
+                  <div
+                    key={agent.id}
+                    className="rounded-lg border border-zinc-800 bg-zinc-900 p-4"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h3 className="font-medium text-zinc-100">{agent.name}</h3>
+                        <p className="mt-1 text-xs text-zinc-500">{agent.description}</p>
+                      </div>
+                      <button
+                        onClick={() => deleteAgent(agent.id)}
+                        className="text-zinc-600 hover:text-red-400 text-sm"
+                      >
+                        ✕
+                      </button>
                     </div>
-                    <button
-                      onClick={() => deleteAgent(agent.id)}
-                      className="text-zinc-600 hover:text-red-400 text-sm"
-                    >
-                      ✕
-                    </button>
+                    <div className="mt-3 flex items-center gap-2 text-xs text-zinc-400">
+                      <span className="rounded bg-zinc-800 px-2 py-0.5">{agent.model}</span>
+                      <span
+                        className={`rounded px-2 py-0.5 ${
+                          agent.status === "idle"
+                            ? "bg-zinc-800"
+                            : "bg-emerald-900 text-emerald-300"
+                        }`}
+                      >
+                        {agent.status}
+                      </span>
+                    </div>
                   </div>
-                  <div className="mt-3 flex items-center gap-2 text-xs text-zinc-400">
-                    <span className="rounded bg-zinc-800 px-2 py-0.5">{agent.model}</span>
+                ))}
+              </div>
+            )}
+          </section>
+
+          <section>
+            <h3 className="mb-4 text-base font-semibold text-zinc-200">Tasks</h3>
+            <div className="mb-4 flex gap-3">
+              <input
+                value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
+                placeholder="Task title"
+                className="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
+              />
+              <button
+                onClick={createTask}
+                className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 transition-colors"
+              >
+                Add Task
+              </button>
+            </div>
+            {tasks.length === 0 ? (
+              <p className="text-sm text-zinc-500">No tasks yet. Add one above.</p>
+            ) : (
+              <div className="space-y-2">
+                {tasks.map((task) => (
+                  <div
+                    key={task.id}
+                    className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3"
+                  >
+                    <div>
+                      <span className="font-medium text-zinc-200">{task.title}</span>
+                      <span className="ml-2 text-xs text-zinc-500">
+                        {new Date(task.createdAt).toLocaleString()}
+                      </span>
+                    </div>
                     <span
-                      className={`rounded px-2 py-0.5 ${
-                        agent.status === "idle"
-                          ? "bg-zinc-800"
-                          : "bg-emerald-900 text-emerald-300"
+                      className={`rounded px-2 py-0.5 text-xs ${
+                        task.status === "completed"
+                          ? "bg-emerald-900 text-emerald-300"
+                          : task.status === "running"
+                          ? "bg-blue-900 text-blue-300"
+                          : "bg-zinc-800 text-zinc-400"
                       }`}
                     >
-                      {agent.status}
+                      {task.status}
                     </span>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-
-        {/* Tasks Section */}
-        <section>
-          <h2 className="mb-4 text-lg font-semibold text-zinc-200">Tasks</h2>
-          <div className="mb-4 flex gap-3">
-            <input
-              value={newTaskTitle}
-              onChange={(e) => setNewTaskTitle(e.target.value)}
-              placeholder="Task title"
-              className="flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
-            />
-            <button
-              onClick={createTask}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 transition-colors"
-            >
-              Add Task
-            </button>
-          </div>
-          {tasks.length === 0 ? (
-            <p className="text-sm text-zinc-500">No tasks yet. Add one above.</p>
-          ) : (
-            <div className="space-y-2">
-              {tasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-900 px-4 py-3"
-                >
-                  <div>
-                    <span className="font-medium text-zinc-200">{task.title}</span>
-                    <span className="ml-2 text-xs text-zinc-500">
-                      {new Date(task.createdAt).toLocaleString()}
-                    </span>
-                  </div>
-                  <span
-                    className={`rounded px-2 py-0.5 text-xs ${
-                      task.status === "completed"
-                        ? "bg-emerald-900 text-emerald-300"
-                        : task.status === "running"
-                        ? "bg-blue-900 text-blue-300"
-                        : "bg-zinc-800 text-zinc-400"
-                    }`}
-                  >
-                    {task.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
       </main>
     </div>
   );
