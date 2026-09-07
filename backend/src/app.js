@@ -6,6 +6,8 @@ const errorHandler = require("./middleware/errorHandler");
 const healthRoutes = require("./routes/health");
 const agentRoutes = require("./routes/agents");
 const taskRoutes = require("./routes/tasks");
+const themeRoutes = require("./routes/themes");
+const storeRoutes = require("./routes/stores");
 
 const app = express();
 
@@ -20,6 +22,8 @@ if (process.env.NODE_ENV !== "test") {
 app.use("/api/health", healthRoutes);
 app.use("/api/agents", agentRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use("/api/themes", themeRoutes);
+app.use("/api/stores", storeRoutes);
 
 app.use(errorHandler);
 
