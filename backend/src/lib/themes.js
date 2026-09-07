@@ -9,44 +9,78 @@ const FALLBACK_THEMES = [
     id: "shrine",
     name: "Shrine",
     version: "1.3.1",
-    vendor: "Shrine",
+    author: "Shrine",
     package: "themes/packages/shrine-1.3.1.zip",
-    description: "Shrine 1.3.1 Shopify theme template",
+    role: "starter",
+    description: "Crossoncourse student template — Shrine theme",
   },
   {
     id: "olivia",
     name: "Olivia",
     version: "14.2.5",
-    vendor: "LuminTheme",
+    author: "LuminTheme",
     package: "themes/packages/olivia-14.2.5.zip",
-    description: "Olivia 14.2.5 (LuminTheme) Shopify theme template",
+    role: "conversion",
+    description: "Crossoncourse student template — Olivia/Lumin theme",
   },
 ];
 
-function withAvailability(theme) {
+const FALLBACK_FLOW = {
+  start: "Pick template + create store draft",
+  approve: "Human/agent approves store config",
+  add: "Provision store with selected theme package",
+};
+
+function normalizeTheme(theme) {
   return {
-    ...theme,
-    available: fs.existsSync(path.join(REPO_ROOT, theme.package)),
+    id: theme.id,
+    name: theme.name,
+    version: theme.version,
+    author: theme.author || theme.vendor || "",
+    vendor: theme.vendor || theme.author || "",
+    package: theme.package,
+    role: theme.role || null,
+    description: theme.description || "",
+    available: Boolean(theme.package) && fs.existsSync(path.join(REPO_ROOT, theme.package)),
   };
 }
 
-function listThemes() {
-  let themes = FALLBACK_THEMES;
+function readCatalog() {
+  const raw = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
+  const list = raw.templates || raw.themes || [];
+  if (!Array.isArray(list) || list.length === 0) {
+    throw new Error("catalog has no templates");
+  }
+  return {
+    themes: list.map(normalizeTheme),
+    flow: raw.flow || FALLBACK_FLOW,
+  };
+}
+
+function listCatalog() {
   try {
     if (fs.existsSync(CATALOG_PATH)) {
-      const raw = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8"));
-      if (Array.isArray(raw.themes) && raw.themes.length > 0) {
-        themes = raw.themes;
-      }
+      return readCatalog();
     }
   } catch (err) {
     console.warn("Failed to read themes catalog, using fallback:", err.message);
   }
-  return themes.map(withAvailability);
+  return {
+    themes: FALLBACK_THEMES.map(normalizeTheme),
+    flow: FALLBACK_FLOW,
+  };
+}
+
+function listThemes() {
+  return listCatalog().themes;
 }
 
 function getTheme(id) {
   return listThemes().find((theme) => theme.id === id) || null;
 }
 
-module.exports = { listThemes, getTheme, REPO_ROOT, CATALOG_PATH };
+function getFlow() {
+  return listCatalog().flow;
+}
+
+module.exports = { listThemes, listCatalog, getTheme, getFlow, REPO_ROOT, CATALOG_PATH };

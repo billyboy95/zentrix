@@ -42,7 +42,7 @@ In-memory Maps (same pattern as agents/tasks). Data resets on server restart. No
 
 | Step | API | Effect |
 |------|-----|--------|
-| List themes | `GET /api/themes` | Catalog from `themes/catalog.json` (`shrine`, `olivia`) plus `available` if the zip exists |
+| List themes | `GET /api/themes` | `templates` from `themes/catalog.json` (`shrine` starter, `olivia` conversion) plus `flow` and `available` when the zip exists |
 | Start | `POST /api/stores` `{ name, templateId }` | Creates `draft`. `templateId` must be `shrine` or `olivia` |
 | CRUD | `GET /api/stores`, `GET/PUT/DELETE /api/stores/:id` | Optional `?status=` filter (comma-separated) |
 | Submit | `POST /api/stores/:id/submit` | `draft` → `pending_approval` |
@@ -56,4 +56,4 @@ Statuses: `draft` \| `pending_approval` \| `approved` \| `provisioning` \| `live
 TODO: Shopify Admin API — create shop, upload/publish theme zip from themePackage, persist myshopify domain.
 ```
 
-Theme zips (`themes/packages/shrine-1.3.1.zip`, `themes/packages/olivia-14.2.5.zip`) may still be pending; see `themes/README.md`.
+Theme packages live under `themes/packages/` (Shrine 1.3.1, Olivia 14.2.5 / LuminTheme). Catalog schema uses `templates` + `flow` — see `themes/catalog.json` and `themes/README.md`.

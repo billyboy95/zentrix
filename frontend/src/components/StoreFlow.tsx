@@ -8,7 +8,9 @@ export type Theme = {
   id: string;
   name: string;
   version: string;
+  author?: string;
   vendor?: string;
+  role?: string | null;
   package: string;
   description?: string;
   available: boolean;
@@ -31,18 +33,22 @@ const FALLBACK_THEMES: Theme[] = [
     id: "shrine",
     name: "Shrine",
     version: "1.3.1",
+    author: "Shrine",
     vendor: "Shrine",
+    role: "starter",
     package: "themes/packages/shrine-1.3.1.zip",
-    description: "Shrine 1.3.1 Shopify theme template",
+    description: "Crossoncourse student template — Shrine theme",
     available: false,
   },
   {
     id: "olivia",
     name: "Olivia",
     version: "14.2.5",
+    author: "LuminTheme",
     vendor: "LuminTheme",
+    role: "conversion",
     package: "themes/packages/olivia-14.2.5.zip",
-    description: "Olivia 14.2.5 (LuminTheme) Shopify theme template",
+    description: "Crossoncourse student template — Olivia/Lumin theme",
     available: false,
   },
 ];
@@ -256,11 +262,12 @@ export default function StoreFlow() {
                     <span className="text-xs text-zinc-500">{theme.version}</span>
                   </div>
                   <p className="mt-1 text-xs text-zinc-500">
-                    {theme.vendor ? `${theme.vendor} · ` : ""}
+                    {(theme.author || theme.vendor) ? `${theme.author || theme.vendor} · ` : ""}
+                    {theme.role ? `${theme.role} · ` : ""}
                     {theme.id}
                   </p>
                   <p className="mt-2 font-mono text-[11px] text-zinc-600">{theme.package}</p>
-                  <p className="mt-1 text-[11px] text-zinc-500">
+                  <p className={`mt-1 text-[11px] ${theme.available ? "text-emerald-400" : "text-zinc-500"}`}>
                     {theme.available ? "Package on disk" : "Package pending"}
                   </p>
                 </button>

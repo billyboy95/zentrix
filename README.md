@@ -23,7 +23,7 @@ Catalog: [`themes/catalog.json`](themes/catalog.json)
 | `shrine` | Shrine 1.3.1 | `themes/packages/shrine-1.3.1.zip` |
 | `olivia` | Olivia 14.2.5 / LuminTheme | `themes/packages/olivia-14.2.5.zip` |
 
-Zip files may still be pending. The Control Centre uses catalog IDs regardless; provision records the intended path. See [`themes/README.md`](themes/README.md).
+Packages are in-repo (`themes/packages/*.zip`). `GET /api/themes` marks each template `available` when the zip is on disk. See [`themes/README.md`](themes/README.md).
 
 ## Tech Stack
 

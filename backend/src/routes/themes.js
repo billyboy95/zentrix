@@ -1,10 +1,11 @@
 const { Router } = require("express");
-const { listThemes } = require("../lib/themes");
+const { listCatalog } = require("../lib/themes");
 
 const router = Router();
 
 router.get("/", (_req, res) => {
-  res.json({ themes: listThemes() });
+  const { themes, flow } = listCatalog();
+  res.json({ themes, flow });
 });
 
 module.exports = router;
