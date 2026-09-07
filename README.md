@@ -37,7 +37,7 @@ Packages are in-repo (`themes/packages/*.zip`). `GET /api/themes` marks each tem
 
 Clone the repo at https://github.com/billyboy95/zentrix.git
 
-After cloning, set up backend under backend/ (install deps, copy env example, run the API) and frontend under frontend/ (install deps, run the app). Dashboard: http://localhost:3000
+After cloning, set up backend under backend/ (install deps, copy env example, run the API) and frontend under frontend/ (install deps, run the app). Dashboard: http://localhost:3000 (Stores). Agent MVP: http://localhost:3000/agents
 
 Local API (in-memory, no Shopify keys):
 

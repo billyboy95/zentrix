@@ -58,7 +58,7 @@ function statusClass(status: string) {
     case "live":
       return "bg-emerald-900 text-emerald-300";
     case "approved":
-      return "bg-indigo-900 text-indigo-300";
+      return "bg-emerald-950 text-emerald-200";
     case "provisioning":
       return "bg-blue-900 text-blue-300";
     case "pending_approval":
@@ -189,13 +189,13 @@ export default function StoreFlow() {
   return (
     <section className="space-y-6">
       <div>
-        <p className="text-xs font-medium uppercase tracking-widest text-indigo-400">
+        <p className="text-xs font-medium uppercase tracking-widest text-emerald-400">
           Autonomous Shopify stores
         </p>
-        <h2 className="mt-1 text-lg font-semibold text-zinc-100">Start → Approve → Add</h2>
+        <h1 className="mt-1 text-xl font-semibold text-zinc-100">Start → Approve → Add</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          Draft a store on Shrine or Olivia, approve it, then provision. Theme upload to Shopify
-          Admin is stubbed for this MVP.
+          Pick Shrine or Olivia, draft the store, approve it, then add the theme package.
+          Shopify Admin upload is still stubbed.
         </p>
       </div>
 
@@ -209,7 +209,7 @@ export default function StoreFlow() {
             key={step.n}
             className="rounded-lg border border-zinc-800 bg-zinc-900/60 px-4 py-3"
           >
-            <p className="text-xs font-semibold text-indigo-400">
+            <p className="text-xs font-semibold text-emerald-400">
               {step.n}. {step.title}
             </p>
             <p className="mt-1 text-sm text-zinc-400">{step.body}</p>
@@ -239,7 +239,7 @@ export default function StoreFlow() {
             value={storeName}
             onChange={(e) => setStoreName(e.target.value)}
             placeholder="e.g. Karoo Home"
-            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
+            className="mt-1 w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-2 text-sm placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
           />
 
           <p className="mt-4 text-xs text-zinc-500">Theme template</p>
@@ -253,7 +253,7 @@ export default function StoreFlow() {
                   onClick={() => setTemplateId(theme.id as "shrine" | "olivia")}
                   className={`rounded-lg border p-3 text-left transition-colors ${
                     selected
-                      ? "border-indigo-500 bg-indigo-950/50"
+                      ? "border-emerald-500 bg-emerald-950/40"
                       : "border-zinc-800 bg-zinc-950 hover:border-zinc-600"
                   }`}
                 >
@@ -279,7 +279,7 @@ export default function StoreFlow() {
             type="button"
             onClick={startStore}
             disabled={busy}
-            className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500 transition-colors disabled:opacity-50"
+            className="mt-4 rounded-lg bg-emerald-700 px-4 py-2 text-sm font-medium hover:bg-emerald-600 transition-colors disabled:opacity-50"
           >
             Start store
           </button>
@@ -360,7 +360,7 @@ export default function StoreFlow() {
                   type="button"
                   onClick={() => provisionStore(store.id)}
                   disabled={busy}
-                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium hover:bg-indigo-500 disabled:opacity-50"
+                  className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-medium hover:bg-emerald-600 disabled:opacity-50"
                 >
                   Provision
                 </button>
